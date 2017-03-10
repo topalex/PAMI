@@ -86,6 +86,16 @@ class HangupEvent extends EventMessage
     }
 
     /**
+     * Returns key: 'ConnectedLineNum'.
+     *
+     * @return string
+     */
+    public function getConnectedLineNum()
+    {
+        return $this->getKey('ConnectedLineNum');
+    }
+
+    /**
      * Returns key: 'UniqueID'.
      *
      * @return string
