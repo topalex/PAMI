@@ -102,13 +102,4 @@ interface IClient
      * @return \PAMI\Message\Response\ResponseMessage
      */
     public function send(OutgoingMessage $message);
-
-    /**
-     * Sets the logger implementation.
-     *
-     * @param Psr\Log\LoggerInterface $logger The PSR3-Logger
-     *
-     * @return void
-     */
-    public function setLogger(LoggerInterface $logger);
 }

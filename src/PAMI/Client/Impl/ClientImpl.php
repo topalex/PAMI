@@ -39,8 +39,6 @@ use PAMI\Message\Event\Factory\Impl\EventFactoryImpl;
 use PAMI\Listener\IEventListener;
 use PAMI\Client\Exception\ClientException;
 use PAMI\Client\IClient;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 /**
  * TCP Client implementation for AMI.
@@ -56,12 +54,6 @@ use Psr\Log\NullLogger;
  */
 class ClientImpl implements IClient
 {
-    /**
-     * PSR-3 logger.
-     * @var LoggerInterface
-     */
-    private $logger;
-
     /**
      * Hostname
      * @var string
@@ -192,7 +184,6 @@ class ClientImpl implements IClient
         }
         @stream_set_blocking($this->socket, 0);
         $this->currentProcessingMessage = '';
-        $this->logger->debug('Logged in successfully to ami.');
     }
 
     /**
@@ -264,9 +255,6 @@ class ClientImpl implements IClient
     {
         $msgs = $this->getMessages();
         foreach ($msgs as $aMsg) {
-            $this->logger->debug(
-                '------ Received: ------ ' . "\n" . $aMsg . "\n\n"
-            );
             $resPos = strpos($aMsg, 'Response:');
             $evePos = strpos($aMsg, 'Event:');
             if (($resPos !== false) &&
@@ -291,7 +279,6 @@ class ClientImpl implements IClient
                 $response = $this->findResponse($event);
                 $response->addEvent($event);
             }
-            $this->logger->debug('----------------');
         }
     }
 
@@ -401,9 +388,6 @@ class ClientImpl implements IClient
     {
         $messageToSend = $message->serialize();
         $length = strlen($messageToSend);
-        $this->logger->debug(
-            '------ Sending: ------ ' . "\n" . $messageToSend . '----------'
-        );
         $this->lastActionId = $message->getActionId();
         if (@fwrite($this->socket, $messageToSend) < $length) {
             throw new ClientException('Could not send message');
@@ -431,20 +415,7 @@ class ClientImpl implements IClient
      */
     public function close()
     {
-        $this->logger->debug('Closing connection to asterisk.');
         @stream_socket_shutdown($this->socket, STREAM_SHUT_RDWR);
-    }
-
-    /**
-     * Sets the logger implementation.
-     *
-     * @param LoggerInterface $logger The PSR3-Logger
-     *
-     * @return void
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
     }
 
     /**
@@ -455,7 +426,6 @@ class ClientImpl implements IClient
      */
     public function __construct(array $options)
     {
-        $this->logger = new NullLogger;
         $this->host = $options['host'];
         $this->port = (int) $options['port'];
         $this->user = $options['username'];
