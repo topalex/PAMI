@@ -95,6 +95,16 @@ class CoreShowChannelEvent extends EventMessage
         return $this->getKey('Extension');
     }
 
+    /**
+     * Returns key: 'Exten'.
+     *
+     * @return string
+     */
+    public function getExten()
+    {
+        return $this->getKey('Exten');
+    }
+
 
     /**
      * Returns key: 'Priority'.
@@ -154,6 +164,26 @@ class CoreShowChannelEvent extends EventMessage
     public function getCallerIDNum()
     {
         return $this->getKey('CallerIDNum');
+    }
+
+    /**
+     * Returns key: 'CallerIDName'.
+     *
+     * @return string
+     */
+    public function getCallerIDName()
+    {
+        return $this->getKey('CallerIDName');
+    }
+
+    /**
+     * Returns key: 'ConnectedLineNum'.
+     *
+     * @return string
+     */
+    public function getConnectedLineNum()
+    {
+        return $this->getKey('ConnectedLineNum');
     }
 
     /**
